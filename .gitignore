@@ -1,0 +1,10 @@
+# Dependencies
+Vendor/
+
+# Random files
+.DS_Store
+
+# Testing
+Dockerfile
+Makefile
+
