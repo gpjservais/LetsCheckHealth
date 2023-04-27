@@ -8,3 +8,5 @@ Vendor/
 Dockerfile
 Makefile
 
+# Executable
+checkhealth

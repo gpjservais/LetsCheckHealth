@@ -406,7 +406,6 @@ func TestGetEndpointHealth(t *testing.T) {
 	var delay bool = false
 
 	mock_server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// FIXME: assert request contents are correct
 		assert.Equal(t, r.Method, "POST")
 		assert.Equal(t, r.Header, http.Header{
 			// header values expected as part of this mock request
