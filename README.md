@@ -1,5 +1,5 @@
 # Let's Check Health (checkhealth)
-CheckHealth is a simple CLI program that takes a defined endpoint configuration file as an intput and uses it to run HTTP client requests every 15 second. An endpoint is then labeled as UP if the endpoint returns a status code between 200 and 299 and the response latency is less than 500ms. Otherwise, the node is labeled as down.
+LetsCheckHealth is a simple CLI program that takes a defined endpoint configuration file as an intput and uses it to run HTTP client requests every 15 second. An endpoint is then labeled as UP if the endpoint returns a status code between 200 and 299 and the response latency is less than 500ms. Otherwise, the node is labeled as down.
 
 Using the endpoint status, cumulative domain availability is printed to the console every 15 seconds over the lifetime of the process. A domain is the fully qualified domain name (FQDN) of an endpoint, where it's possible to have multiple endpoints. Also note, cumulative availability data does not persist across executions of the program.
 
