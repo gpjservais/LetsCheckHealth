@@ -1,7 +1,7 @@
 # Let's Check Health (checkhealth)
 CheckHealth is a simple CLI program that takes a defined endpoint configuration file as an intput and uses it to run HTTP client requests every 15 second. An endpoint is then labeled as UP if the endpoint returns a status code between 200 and 299 and the response latency is less than 500ms. Otherwise, the node is labeled as down.
 
-Using the endpoint status, cumulative domain availability is printed to the console every 15 seconds over the process lifetime. A domain is the fully qualified domain name (FQDN) of an endpoint, where it's possible to have multiple endpoints. Also note, cumulative availability data does not persist across executions of the program.
+Using the endpoint status, cumulative domain availability is printed to the console every 15 seconds over the lifetime of the process. A domain is the fully qualified domain name (FQDN) of an endpoint, where it's possible to have multiple endpoints. Also note, cumulative availability data does not persist across executions of the program.
 
 ### Build and Run
 ##### Requirements
@@ -10,23 +10,23 @@ To build and run this CLI program, you will need to have the following installed
 - Git
 
 ##### Installation
-1. Clone this repository to your local machine using the following command:
+1. Clone this repository to your local machine:
 ```
 git clone https://github.com/gpjservais/LetsCheckHealth.git
 ```
 
-2. Navigate to the project directory using the command line.
+2. Navigate to the project directory:
 ```
 cd LetsCheckHealth
 ```
 
-3. Install the required dependencies by running the following command:
+3. Install the required dependencies:
 ```
 go mod download
 ```
 
 ##### Building the program
-To build the program, run the following command in the project directory:
+To build the program, run the following command within the project directory:
 ```
 go build
 ```
@@ -34,7 +34,7 @@ go build
 This will create an executable file named `checkhealth` (or `checkhealth.exe` on Windows) in the project directory.
 
 ##### Running the program
-To run the program, run the following command in the project directory, replacing <file> with the path of your YAML endpoint configuration file:
+To run the program, run the following command in the project directory, replacing <file> with the path of your YAML endpoint configuration file:  
 (MacOS/Linux/Unix)
 ```
 ./checkhealth <file>
