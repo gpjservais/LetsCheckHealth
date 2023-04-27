@@ -50,7 +50,7 @@ file
 - file should be the relative or absolute path to an endpoint yaml configuration file.
 
 ##### CONFIGURATION FILE:
-_The configuration file defines a list of endpoints to query in YAML. It has the following schema:_
+_The configuration file defines a list of endpoints to query in YAML. It has the following schema:_  
 name (string, required)
 - A free-text description of the endpoint.
 
