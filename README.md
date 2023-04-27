@@ -34,7 +34,7 @@ go build
 This will create an executable file named `checkhealth` (or `checkhealth.exe` on Windows) in the project directory.
 
 ##### Running the program
-To run the program, run the following command in the project directory, replacing <file> with the path of your YAML endpoint configuration file:
+To run the program, run the following command in the project directory, replacing <file> with the path of your YAML endpoint configuration file:  
 (MacOS/Linux/Unix)
 ```
 ./checkhealth <file>
