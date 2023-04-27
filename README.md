@@ -3,7 +3,7 @@ CheckHealth is a simple CLI program that takes a defined endpoint configuration 
 
 Using the endpoint status, cumulative domain availability is printed to the console every 15 seconds over the lifetime of the process. A domain is the fully qualified domain name (FQDN) of an endpoint, where it's possible to have multiple endpoints. Also note, cumulative availability data does not persist across executions of the program.
 
-### Build and Run
+### Installation, Build, and Run
 ##### Requirements
 To build and run this CLI program, you will need to have the following installed:
 - Go (version 1.20 or later)
