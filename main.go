@@ -292,13 +292,19 @@ func (endpoint *Endpoint) GetEndpointHealth(max_latency time.Duration) {
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
 		endpoint.Domain.UpdateDomainStats(EndpointDown)
 
-		// added to ensure that we close our connection properly
-		io.ReadAll(response.Body)
+		// added to ensure that the connection closes properly
+		_, err = io.ReadAll(response.Body)
+		if err != nil {
+			log.Printf("Failed to read response body: %v", err)
+		}
 		return
 	}
 
-	// added to ensure that we close our connection properly
-	io.ReadAll(response.Body)
+	// added to ensure that the connection closes properly
+	_, err = io.ReadAll(response.Body)
+	if err != nil {
+		log.Printf("Failed to read response body: %v", err)
+	}
 
 	endpoint.Domain.UpdateDomainStats(EndpointUp)
 }
