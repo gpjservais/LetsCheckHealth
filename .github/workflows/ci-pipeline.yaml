@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        go-version: ['1.19.x', '1.x']
+        go-version: ['1.15.x', '1.x']
 
     name: Build Go ${{ matrix.go-version }}
     steps:
@@ -29,7 +29,7 @@ jobs:
     
     strategy:
       matrix:
-        go-version: ['1.19.x', '1.x']
+        go-version: ['1.15.x', '1.x']
 
     name: Test Go ${{ matrix.go-version }}
     steps:
