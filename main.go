@@ -4,7 +4,7 @@ CheckHealth validates if HTTP endpoints are healthy every 15 seconds.
 DESCRIPTION:
 
 	CheckHealth is a simple CLI program that takes a defined endpoint configuration file as an
-	intput and uses it to run HTTP client requests every 15 second. An endpoint is then labeled
+	input and uses it to run HTTP client requests every 15 second. An endpoint is then labeled
 	as UP if the endpoint returns a status code between 200 and 299 and the response latency is
 	less than 500ms. Otherwise, the node is labeled as down.
 
@@ -430,7 +430,7 @@ func (target *HealthCheckTargets) RunCheckHealth() {
 
 // LogDomainHealth is a method for HealthCheckTargets that iterates through the Domains linked list.
 // It computes the cumulative domain availability of each domain over the lifetime of the process,
-// rounding to the nearest whole number. Each domain's availabilty is printed to the console.
+// rounding to the nearest whole number. Each domain's availability is printed to the console.
 func (target *HealthCheckTargets) LogDomainHealth() {
 	domain := target.Domains
 
