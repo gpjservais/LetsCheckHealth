@@ -83,8 +83,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Endpoints is a slice of Endpoint used to unmarshal endpoint configuration for a provided
-// YAML file.
+// Endpoint is an object containing information needed to create an HTTP request. It also contains
+// a pointer to a Domain object that can used for recording endpoint availability.
 type Endpoint struct {
 	Name    string            `yaml:"name"`
 	Url     string            `yaml:"url"`
@@ -95,6 +95,8 @@ type Endpoint struct {
 	Domain *Domain
 }
 
+// Endpoints is a slice of the Endpoint object used to unmarshal endpoint configuration from a
+// provided YAML file.
 type Endpoints []Endpoint
 
 // The domain object is used to maintain the HTTP request details for a single domain's
@@ -206,42 +208,6 @@ func GetConfig() (Endpoints, error) {
 	return endpoint_objects, nil
 }
 
-// CreateRequest wraps around http.Request to create a new HTTP request.
-//
-// The function takes an HTTP method, URL, JSON-formatted body, and headers. It returns a pointer to an
-// HTTP request and an error. An error is returned if it fails to create a new request.
-//
-// If a method isn't provided, it defaults to the GET method.
-// If a body isn't provided, a nil is passed when creating the new request.
-// If headers are provided, they will be added and override any default header values.
-//
-// Note: Headers are assumed to be single valued.
-func CreateRequest(ctx context.Context, method string, raw_url string, body string, headers map[string]string) (*http.Request, error) {
-	// Body to io.Reader interface
-	var body_reader io.Reader = nil
-
-	if body != "" {
-		body_reader = bytes.NewReader([]byte(body))
-	}
-
-	if method == "" {
-		method = "GET"
-	}
-
-	// creates the HTTP request
-	request, err := http.NewRequestWithContext(ctx, method, raw_url, body_reader)
-	if err != nil {
-		return nil, err
-	}
-
-	// Add any required headers
-	for field, value := range headers {
-		request.Header.Set(field, value)
-	}
-
-	return request, nil
-}
-
 // UpdateDomainStats is a method for a domain to update availability statistics.
 //
 // The method takes a boolean input denoting whether a endpoint was recorded as up in the domain.
@@ -261,6 +227,44 @@ func (domain *Domain) UpdateDomainStats(is_up bool) {
 	domain.TotalRequests += 1
 }
 
+// CreateRequest is an Endpoint method that wraps around http.Request to create a new HTTP request.
+//
+// The function takes a single argument for the context. It returns a pointer to an HTTP request
+// and an error. An error is returned if it fails to create a new request.
+//
+// If an endpoint doesn't have a method, it defaults to the GET method.
+// If an endpoint's body isn't provided, nil is passed when creating the new request.
+// If an endpoint has headers, they will be added and override any default header values.
+//
+// Note: Headers are assumed to be single valued.
+func (endpoint *Endpoint) CreateRequest(ctx context.Context) (*http.Request, error) {
+	// body to io.Reader interface
+	var body_reader io.Reader = nil
+
+	if endpoint.Body != "" {
+		body_reader = bytes.NewReader([]byte(endpoint.Body))
+	}
+
+	// set method based on endpoint method. Do not modify endpoint.Method
+	method := endpoint.Method
+	if method == "" {
+		method = "GET"
+	}
+
+	// creates the HTTP request
+	request, err := http.NewRequestWithContext(ctx, method, endpoint.Url, body_reader)
+	if err != nil {
+		return nil, err
+	}
+
+	// Add any required headers
+	for field, value := range endpoint.Headers {
+		request.Header.Set(field, value)
+	}
+
+	return request, nil
+}
+
 // GetEndpointHealth is a method that has a provided HTTP client run an endpoint's request and
 // determine the endpoint's health. If an error is encountered while performing the request or if
 // the status code of the server response is not between 200 and 299, the endpoint is considered
@@ -277,7 +281,7 @@ func (endpoint *Endpoint) GetEndpointHealth(max_latency time.Duration) {
 
 	// forcing creating request to be fatal as it's a configuration issue
 	// this should be validated in CreateNewTargets()
-	request, err := CreateRequest(ctx, endpoint.Method, endpoint.Url, endpoint.Body, endpoint.Headers)
+	request, err := endpoint.CreateRequest(ctx)
 	if err != nil {
 		log.Fatalf("ERROR: Failed to create HTTP Request: %v", err)
 	}
@@ -324,12 +328,8 @@ func (endpoints *Endpoints) CreateNewTargets() (HealthCheckTargets, error) {
 	// create endpoints for each configuration object
 	for i := 0; i < len(*endpoints); i++ {
 		// validate successful creation of HTTP requests
-		_, err := CreateRequest(
+		_, err := (*endpoints)[i].CreateRequest(
 			context.Background(),
-			(*endpoints)[i].Method,
-			(*endpoints)[i].Url,
-			(*endpoints)[i].Body,
-			(*endpoints)[i].Headers,
 		)
 		if err != nil {
 			err = fmt.Errorf("failed to create new HTTP request: %v", err)

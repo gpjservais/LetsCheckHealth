@@ -101,30 +101,31 @@ func TestGetConfig(t *testing.T) {
 func TestCreateRequest(t *testing.T) {
 	cases := []struct {
 		name           string
-		method         string
-		url            string
-		body           string
-		headers        map[string]string
+		endpoint       Endpoint
 		expectedError  error
 		expectedHeader http.Header
 	}{
 		{
-			name:           "GET request with no body or headers",
-			method:         "GET",
-			url:            "http://example.com/",
-			body:           "",
-			headers:        nil,
+			name: "GET request with no body or headers",
+			endpoint: Endpoint{
+				Url:     "http://example.com/",
+				Method:  "GET",
+				Body:    "",
+				Headers: nil,
+			},
 			expectedError:  nil,
 			expectedHeader: http.Header{},
 		},
 		{
-			name:   "POST request with body and headers",
-			method: "POST",
-			url:    "https://fetch.com/some/post/endpoint",
-			body:   `{"foo":"bar"}`,
-			headers: map[string]string{
-				"content-type": "application/json",
-				"user-agent":   "fetch-synthetic-monitor",
+			name: "POST request with body and headers",
+			endpoint: Endpoint{
+				Url:    "https://fetch.com/some/post/endpoint",
+				Method: "POST",
+				Body:   `{"foo":"bar"}`,
+				Headers: map[string]string{
+					"content-type": "application/json",
+					"user-agent":   "fetch-synthetic-monitor",
+				},
 			},
 			expectedError: nil,
 			expectedHeader: http.Header{
@@ -136,7 +137,7 @@ func TestCreateRequest(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			request, err := CreateRequest(context.Background(), tc.method, tc.url, tc.body, tc.headers)
+			request, err := tc.endpoint.CreateRequest(context.Background())
 
 			if tc.expectedError != nil {
 				assert.Equal(t, err, tc.expectedError)
@@ -146,19 +147,19 @@ func TestCreateRequest(t *testing.T) {
 			assert.Equal(t, err, nil)
 
 			// confirm request methods is the input method
-			assert.Equal(t, request.Method, tc.method)
+			assert.Equal(t, request.Method, tc.endpoint.Method)
 
 			// confirm that requested URL is correct
-			expectedURL, err := url.Parse(tc.url)
+			expectedURL, err := url.Parse(tc.endpoint.Url)
 			assert.Equal(t, err, nil)
 			assert.Equal(t, *request.URL, *expectedURL)
 
 			// confirm body populates request
-			if tc.body != "" {
+			if tc.endpoint.Body != "" {
 				var requestBody []byte
 				requestBody, err := io.ReadAll(request.Body)
 				assert.Equal(t, err, nil)
-				assert.Equal(t, requestBody, []byte(tc.body))
+				assert.Equal(t, requestBody, []byte(tc.endpoint.Body))
 			} else {
 				assert.Equal(t, request.Body, nil)
 			}
