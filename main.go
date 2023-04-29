@@ -214,7 +214,7 @@ func GetConfig() (Endpoints, error) {
 // If it was, then the domain's up count will increment by 1.
 // Calling UpdateDomainStats will always update a domain's the total number of requests by 1.
 //
-// Returns immediately if the domain pointer passed is not nil.
+// Returns immediately if the domain pointer passed is nil.
 func (domain *Domain) UpdateDomainStats(is_up bool) {
 	if domain == nil {
 		return
