@@ -4,8 +4,13 @@ LetsCheckHealth is a simple CLI program that takes a defined endpoint configurat
 Using the endpoint status, cumulative domain availability is printed to the console every 15 seconds over the lifetime of the process. A domain is the fully qualified domain name (FQDN) of an endpoint, where it's possible to have multiple endpoints. Also note, cumulative availability data does not persist across executions of the program.
 
 ## Installation, Build, and Run
+### Requirements
+To build and run, you will need to have the following installed:
+- Go (version 1.16 or later)
+- Git
+
 ### Installation
-1. Clone this repository to your local machine:
+1. Clone the repository to your local machine:
 ```
 $ git clone https://github.com/gpjservais/LetsCheckHealth.git
 ```
