@@ -206,7 +206,6 @@ func TestCreateNewTargets(t *testing.T) {
 	// cycle through Domains to validate content
 	current_domain := targets.Domains
 	for i := 0; i < len(tc.expectedDomains); i++ {
-
 		// verify domains look correct
 		assert.Equal(t, current_domain.Name, tc.expectedDomains[i])
 		assert.Equal(t, current_domain.UpCount, 0)
@@ -221,7 +220,6 @@ func TestCreateNewTargets(t *testing.T) {
 		// verify endpoints point to the correct domain
 		assert.Equal(t, (*targets.Endpoints)[i].Domain.Name, tc.expectedDomains[i])
 	}
-
 }
 
 func TestGetDomainPointer(t *testing.T) {
@@ -388,7 +386,6 @@ func TestUpdateDomainStats(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-
 			tc.domain.UpdateDomainStats(tc.inputStatus)
 
 			if tc.isNil {

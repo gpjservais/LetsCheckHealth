@@ -1,3 +1,13 @@
 linters:
+  disable-all: true
   enable:
+    - bodyclose
+    - godox
     - gofmt
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - whitespace
